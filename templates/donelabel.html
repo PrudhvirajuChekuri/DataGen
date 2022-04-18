@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DataGen</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='display.css')}}" />
+    <link rel="icon" href="{{url_for('static',filename='data.png')}}" type="image/png" />
+
+    <style>
+        body {
+            background-image: url("/static/Detectdoneb.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript>
+            $(function() {
+              $("a#test").on('click', function(e) {
+                e.preventDefault()
+                $.getJSON('/deletelabel',
+                    function(data) {
+                });
+                return false;
+              });
+            });
+    </script>
+    <div class='righttopcontainer'>
+        <a id=test><button class='glow-on-hover' onclick="location.href='https://datagen.emoviz.biz/';"
+        >HOME</button></a>
+    </div>
+    <div style="padding-top: 150px; padding-left: 200px">
+      <h1 style="text-align: center; color: white">
+        COMPLETED! YOU CAN DOWNLOAD IT BY CLICKING BELOW BUTTON
+      </h1>
+      <a style="padding-left: 450px" href="{{url_for('downloadLabel')}}">
+        <button class="glow-on-hover">DOWNLOAD</button>
+      </a>
+    </div>
+</body>
+
+</html>

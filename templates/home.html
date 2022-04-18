@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DataGen</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='display.css')}}" />
+    <link rel="icon" href="{{url_for('static',filename='data.png')}}" type="image/png" />
+
+    <style>
+        body {
+            background-image: url("/static/Aboutb.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+        }
+        .flex-container{
+          display:flex;
+          flex-direction: column;
+          justify-content:center;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+      <li style="float: left;"><img style="height: 3em;width: 5em;padding-top: 0.2em;"src="{{url_for('static',filename='data.png')}}"/></li>
+      <li style="float: left;font-size: 3em;font-weight: bolder;padding-left: 0.2em;color: rgb(7, 56, 75); text-align: center;text-shadow: 2px 2px rgb(91, 156, 165)">DataGen</li>
+        <li style="float: right">
+            <a href="{{url_for('feedback')}}">Feedback</a>
+        </li>
+    </ul>
+    <div style="padding-top: 5.5em">
+	<div class="flex-container" >
+
+        <div class="cardhome">
+          <div style="text-align: center; padding-top:6em">
+            <a href="{{url_for( 'red_to_bulkin')}} "
+              ><button class="glow-on-hover">
+                GET DATASET
+                <div class="tooltip">
+                  ?<span class="tooltiptext"
+                    >TO GET FACIAL EMOTION CLASSIFICATION(7 LABELS) DATASET
+                    FOR GIVEN IMAGES</span
+                  >
+                </div>
+              </button></a
+            >
+          </div>
+        </div>
+
+        <div class="cardhome">
+          <div style="text-align: center; padding-top:6.5em">
+            <a href="{{url_for( 'getinlab')}} "
+              ><button class="glow-on-hover">
+                GET DATASET
+                <div class="tooltip">
+                  ?<span class="tooltiptext"
+                    >TO GET FACE DETECTION DATASET FOR THE GIVEN IMAGES</span
+                  >
+                </div>
+              </button></a
+            >
+          </div>
+    	</div>
+
+	<div class="cardhome">
+          <div style="text-align: center; padding-top:7em">
+            <a href="{{url_for( 'fed')}} "
+              ><button class="glow-on-hover">
+                GET DATASET
+                <div class="tooltip">
+                  ?<span class="tooltiptext"
+                    >TO GET FACIAL EMOTION DETECTION(7 LABELS) DATASET
+                    FOR GIVEN IMAGES</span
+                  >
+                </div>
+              </button></a
+            >
+          </div>
+        </div>
+
+      </div>
+      <div style="padding-top:15em; padding-left:5em; font-weight: bolder;">
+        <footer>Check <a href="https://emoviz.biz">this site</a> to know how the models work.</footer>
+      </div>
+    </div>
+  </body>
+</html>

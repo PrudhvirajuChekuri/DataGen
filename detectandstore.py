@@ -8,8 +8,8 @@ import warnings
 warnings.filterwarnings('ignore')
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-model = tf.keras.models.load_model("Models/90_83")
-detect_fn = tf.saved_model.load("Models/my_models/saved_model")
+model = tf.keras.models.load_model("Models/FEC")
+detect_fn = tf.saved_model.load("Models/FaceDetector/saved_model")
 class_names = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
 def detectandupdate(img):
@@ -19,9 +19,9 @@ def detectandupdate(img):
     
     for (y, h, x, w) in coordinates:
         cv2.rectangle(image,(x,y),(w, h),(0, 255, 0),2)
-        img2 = image[y:h, x:w]
-        img2 = tf.image.resize(img2, size = [128, 128])
-        pred = model.predict(tf.expand_dims(img2, axis=0))
+        img2 = image[y:h, x:w]#Get the face from the frame with this trick.
+        img2 = tf.image.resize(img2, size = [128, 128])#The input to the model should have size (128, 128).
+        pred = model.predict(tf.expand_dims(img2, axis=0))#Add the extra dimension since it is a single array.
         pred_class = class_names[tf.argmax(pred, axis = 1).numpy()[0]]
         if x > 20 and y > 40:
             cv2.putText(image, pred_class, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
@@ -29,7 +29,7 @@ def detectandupdate(img):
             cv2.putText(image, pred_class, (x + 10, y + 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
     path2 = f"static/pred{img}"
-    cv2.imwrite(path2, image)
+    cv2.imwrite(path2, image)#Save the image.
 
 
     return ([img, "pred" + img])

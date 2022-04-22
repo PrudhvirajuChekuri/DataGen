@@ -19,8 +19,8 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-model = tf.keras.models.load_model("Models/90_83")
-detect_fn = tf.saved_model.load("Models/my_models/saved_model")
+model = tf.keras.models.load_model("Models/FEC")#Load the facial emotion classifier.
+detect_fn = tf.saved_model.load("Models/FaceDetector/saved_model")#Load the face detector.
 
 class_names = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -39,11 +39,14 @@ def MakeZipFed(filepath):
 
 @app.route('/picdelete')
 def picdelete():
+    #When this function is called all the files that are not present in the
+    #list static_files will be deleted.
     for file in os.listdir("static"):
         if file not in static_files:
             os.remove(f"static/{file}")
     return ("nothing")
 
+#Below functions are used to delete the input and output files after the user exits.
 @app.route('/deletelabel')
 def deletelabel():
     os.remove("labeldata.zip")
@@ -94,10 +97,11 @@ def bulkdetect():
     "preparedataset/Surprise"]
 
     if dirs[0] in os.listdir("/home/ubuntu/flaskapp/"):
-        shutil.rmtree("preparedataset")
+        shutil.rmtree("preparedataset")#If the directory exits then deletes it.
 
     for dir in dirs:
         os.mkdir(dir)
+        
     UPLOAD_FOLDER = './preparedataset/input'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     if request.method == 'POST':
@@ -127,12 +131,13 @@ def makebound():
     if(request.method == 'POST'):
         for file in request.files.getlist('file'):
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                filename = secure_filename(file.filename)#Get the filename.
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))#Save it.
                 path = "labeleddata/input/" + str(filename)
-                image = cv2.imread(path)
-                coordinates = draw_bounding_box(image, detect_fn)
+                image = cv2.imread(path)#Read it using cv2.
+                coordinates = draw_bounding_box(image, detect_fn)#Get the bboxes.
 
+                #Loop over bboxes.
                 for (y, h, x, w) in coordinates:
                     cv2.rectangle(image,(x,y),(w, h),(0, 255, 0),2)
                     filepath="labeleddata/output/"+ str(filename)[:-4]+'.txt'
@@ -184,6 +189,7 @@ def fed():
 def getinlab():
     return render_template('inputforbound.html')
 
+#Below three functions are used to download the generated zip files.
 @app.route('/downloadDS', methods=['GET', 'POST'])
 def downloaddataset():
     path='dataset.zip'

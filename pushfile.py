@@ -6,8 +6,8 @@ from utils import draw_bounding_box
 import os
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-model = tf.keras.models.load_model("Models/90_83")
-detect_fn = tf.saved_model.load("Models/my_models/saved_model")
+model = tf.keras.models.load_model("Models/FEC")
+detect_fn = tf.saved_model.load("Models/FaceDetector/saved_model")
 class_names = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
 def pushIntoFile(img):

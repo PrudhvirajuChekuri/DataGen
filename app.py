@@ -135,15 +135,23 @@ def makebound():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))#Save it.
                 path = "labeleddata/input/" + str(filename)
                 image = cv2.imread(path)#Read it using cv2.
+                height, width, depth = image.shape
                 coordinates = draw_bounding_box(image, detect_fn)#Get the bboxes.
 
-                #Loop over bboxes.
+                #Since the file to be generated is xml and follows a format as shown in README file.
+                #First creating a string that consists the head part of the file.
+                content = f"<annotation>\n\t<folder>Some_Folder</folder>\n\t<filename>{filename}</filename>\n\t<path>Some_path</path>\n\t<source>\n\t\t<database>Unknown</database>\n\t</source>\n\t<size>\n\t\t<width>{width}</width>\n\t\t<height>{height}</height>\n\t\t<depth>{depth}</depth>\n\t</size>\n\t<segmented>0</segmented>"
+
+                #Loop over bboxes and conactenate the objects(bboxes) information to the content string.
                 for (y, h, x, w) in coordinates:
                     cv2.rectangle(image,(x,y),(w, h),(0, 255, 0),2)
-                    filepath="labeleddata/output/"+ str(filename)[:-4]+'.txt'
-                    with open(filepath, 'a') as f:
-                        content=str(x) + ' ' + str(y) + ' ' + str(w) + ' '+ str(h) + '\n'
+                    content += f"\n\t<object>\n\t\t<name>face</name>\n\t\t<pose>Unspecified</pose>\n\t\t<truncated>0</truncated>\n\t\t<difficult>0</difficult>\n\t\t<bndbox>\n\t\t\t<xmin>{x}</xmin>\n\t\t\t<ymin>{y}</ymin>\n\t\t\t<xmax>{w}</xmax>\n\t\t\t<ymax>{h}</ymax>\n\t\t</bndbox>\n\t</object>"
+
+                content += "\n</annotation>"#Cat the tail. This flow is followed to make it work for multiple bboxes.
+                filepath="labeleddata/output/"+ str(filename)[:-4]+'.xml'#Save it as an xml file.
+                with open(filepath, 'a') as f:
                         f.write(content)
+
         MakeZipLabel('./labeleddata')
     return render_template('donelabel.html')
 
@@ -168,16 +176,23 @@ def fedbound():
                 image = cv2.imread(path)
                 coordinates = draw_bounding_box(image, detect_fn)
 
+                height, width, depth = image.shape
+                content = f"<annotation>\n\t<folder>Some_Folder</folder>\n\t<filename>{filename}</filename>\n\t<path>Some_path</path>\n\t<source>\n\t\t<database>Unknown</database>\n\t</source>\n\t<size>\n\t\t<width>{width}</width>\n\t\t<height>{height}</height>\n\t\t<depth>{depth}</depth>\n\t</size>\n\t<segmented>0</segmented>"
+
                 for (y, h, x, w) in coordinates:
                     cv2.rectangle(image,(x,y),(w, h),(0, 255, 0),2)
                     img = image[y:h, x:w]
                     img = tf.image.resize(img, size = [128, 128])
                     pred = model.predict(tf.expand_dims(img, axis=0))
                     pred_class = class_names[tf.argmax(pred, axis = 1).numpy()[0]]
-                    filepath="fed/output/"+ str(filename)[:-4]+'.txt'
-                    with open(filepath, 'a') as f:
-                        content=str(x) + ' ' + str(y) + ' ' + str(w) + ' '+ str(h) + ', ' + pred_class + '\n'
+                    #The only thing that differs from the above one is replacing the face with {pred_class} as below.
+                    content += f"\n\t<object>\n\t\t<name>{pred_class}</name>\n\t\t<pose>Unspecified</pose>\n\t\t<truncated>0</truncated>\n\t\t<difficult>0</difficult>\n\t\t<bndbox>\n\t\t\t<xmin>{x}</xmin>\n\t\t\t<ymin>{y}</ymin>\n\t\t\t<xmax>{w}</xmax>\n\t\t\t<ymax>{h}</ymax>\n\t\t</bndbox>\n\t</object>"
+
+                content += "\n</annotation>"
+                filepath="fed/output/"+ str(filename)[:-4]+'.xml'
+                with open(filepath, 'a') as f:
                         f.write(content)
+
         MakeZipFed('./fed')
     return render_template('donefed.html')
 

@@ -236,3 +236,6 @@ def send_sentsafe():
         comments=email+"  \n "+name+"  \n "+comments
         send_mail(email,comments)
     return render_template('sentfeed.html')
+
+if __name__=="__main__":
+    app.run(debug=True)

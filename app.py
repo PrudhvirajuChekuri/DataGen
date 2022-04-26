@@ -86,9 +86,9 @@ def bulkdetect():
     shutil.rmtree("preparedataset")
     return send_file(path,as_attachment=True)
 
-@app.route('/red_to_bulkin')
-def red_to_bulkin():
-    return render_template('bulkinput.html')
+@app.route('/fec')
+def fec():
+    return render_template('inputforfec.html')
 
 @app.route('/makebound', methods=['GET', 'POST'])
 def makebound():
@@ -130,9 +130,9 @@ def makebound():
     shutil.rmtree("labeleddata")
     return send_file(path,as_attachment=True)
 
-@app.route('/getinlab')
-def getinlab():
-    return render_template('inputforbound.html')
+@app.route('/fd')
+def fd():
+    return render_template('inputforfd.html')
 
 @app.route('/fedbound', methods=['GET', 'POST'])
 def fedbound():

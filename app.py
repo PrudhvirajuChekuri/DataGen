@@ -4,7 +4,6 @@ import tensorflow as tf
 import numpy as np
 import os
 import shutil
-from detectandstore import detectandupdate
 from pushfile import pushIntoFile
 from werkzeug.utils import secure_filename
 from flask import current_app
@@ -95,7 +94,7 @@ def red_to_bulkin():
 def makebound():
     dirs = ["labeleddata", "labeleddata/input", "labeleddata/output"]
 
-    if dirs[0] in os.listdir("/home/ubuntu/flaskapp/"):
+    if dirs[0] in os.listdir("./"):
         shutil.rmtree("labeleddata")
 
     for dir in dirs:
@@ -127,13 +126,19 @@ def makebound():
                         f.write(content)
 
         MakeZipLabel('./labeleddata')
-    return render_template('donelabel.html')
+    path='labeldata.zip'
+    shutil.rmtree("labeleddata")
+    return send_file(path,as_attachment=True)
+
+@app.route('/getinlab')
+def getinlab():
+    return render_template('inputforbound.html')
 
 @app.route('/fedbound', methods=['GET', 'POST'])
 def fedbound():
     dirs = ["fed", "fed/input", "fed/output"]
 
-    if dirs[0] in os.listdir("/home/ubuntu/flaskapp/"):
+    if dirs[0] in os.listdir("./"):
         shutil.rmtree("fed")
 
     for dir in dirs:
@@ -168,27 +173,14 @@ def fedbound():
                         f.write(content)
 
         MakeZipFed('./fed')
-    return render_template('donefed.html')
+    
+    path='feddata.zip'
+    shutil.rmtree("fed")
+    return send_file(path,as_attachment=True)
 
 @app.route('/fed')
 def fed():
     return render_template('inputforfed.html')
-
-@app.route('/getinlab')
-def getinlab():
-    return render_template('inputforbound.html')
-
-@app.route('/downloadLB', methods=['GET', 'POST'])
-def downloadLabel():
-    path='labeldata.zip'
-    shutil.rmtree("labeleddata")
-    return send_file(path,as_attachment=True)
-
-@app.route('/download', methods=['GET', 'POST'])
-def downloadfeddataset():
-    path='feddata.zip'
-    shutil.rmtree("fed")
-    return send_file(path,as_attachment=True)
 
 @app.route('/feedback')
 def feedback():

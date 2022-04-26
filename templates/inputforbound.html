@@ -6,71 +6,152 @@
     <link rel="stylesheet" href="{{url_for('static',filename='display.css')}}" />
     <link rel="icon" href="{{url_for('static',filename='data.png')}}" type="image/png" />
 
-    <style>
-        .card {
-            position: relative;
-            top: 50px;
-            left: 5%;
-            right: 70%;
-            height: 450px;
-            width: 40%;
-        }
-    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type=text/javascript>
+            $(function() {
+              $("a#dellnk").on('click', function(e) {
+                e.preventDefault()
+                $.getJSON('/deletelabel',
+                    function(data) {
+                });
+                return false;
+              });
+            });
+    </script>
+    
+    <script>
+      function check() {
+          var p = document.getElementById("inputGroupFile04");
+          if (p.files.length == 0) {
+              alert("Please upload image");
+              return false;
+          } else {
+              return true;
+          }
+      }
+
+      function changevisibility() {
+          var p = document.getElementById("inputGroupFile04");
+          var anc = document.getElementById("dellnk");
+          var but = document.getElementById("delbut");
+          if (p.files.length != 0) {
+            anc.style.pointerEvents = "auto";
+            but.disabled = false;
+          }
+      }
+
+      function showthumb() {
+        var thum = document.getElementById("thumbsup");
+        var p = document.getElementById("inputGroupFile04");
+        thum.style.visibility = "visible";
+        p.value = "";
+        var anc = document.getElementById("dellnk");
+        var but = document.getElementById("delbut");
+        anc.style.pointerEvents = "none";
+        but.disabled = true;
+        setTimeout( function() { disabthumb(); }, 1000);
+      }
+
+      function disabthumb() {
+        var thum = document.getElementById("thumbsup");
+        thum.style.visibility = "hidden";
+      }
+    </script>
+
     <style>
         body {
-            background-image: url("/static/Detectb.jpg");
-            background-size: cover;
-            height: 100%;
+            background-image: linear-gradient(90deg, #eeeeee, #eeeeee);
+        }
+        .flex-container{
+          display:flex;
+          flex-direction: column;
+          justify-content:center;
         }
     </style>
-    <script>
-        function check() {
-            var p = document.getElementById("empf");
-            if (p.files.length == 0) {
-                alert("Please upload image");
-                return false;
-            } else {
-                return true;
-            }
-        }
-    </script>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="righttopcontainer">
-        <a href="{{url_for('home')}}"><button class="glow-on-hover">HOME</button></a
-      >
+  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{url_for('home')}}">
+        <img class="img_logo" src="{{url_for('static',filename='data.png')}}" alt="" srcset="">
+        <span class="content_nav">
+          DATAGEN
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse feedback_" id="navbarNav">
+
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="btn btn-outline-primary" class="nav-link active" aria-current="page" href="{{url_for('home')}}">Home</a>
+          </li>
+        </ul>
+
+      </div>
     </div>
-    <h1 style="text-align: center; color: white">SELECT IMAGES FOR</h1>
-    <h1 style="text-align: center; color: white">FACE DETECTION DATASET</h1>
-    <div class="card" style="left: 500px; top: 100px">
-      <form
-        action="/makebound"
-        method="POST"
-        enctype="multipart/form-data"
-        onsubmit="return check()"
-      >
-        <input
-          class="glow-on-hover"
-          id="empf"
-          type="file"
-          name="file"
-          placeholder="select image from file manager"
-          multiple
-          accept="image/*"
-          style="left: 150px"
-        />
-        <br />
-        <br />
-        <button
-          class="glow-on-hover"
-          type="submit"
-          value="Submit"
-          style="left: 150px; top: 50px"
-        >
-          Submit
-        </button>
-      </form>
+  </nav>
+  <div>
+	  <div class="flex-container" >
+      <div class="container">
+        <div class="row align-items-center mar_card">
+          <div class="col-md-4">
+            <div class="card" style="width: 19rem;">
+              <img src="{{url_for('static',filename='FD_ImgUp.svg')}}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Upload images</h5>
+                <p class="card-text">The zip file consists of input and output folders which can be combined and used for tf 2.0 FD. If it's yolo you can make small changes to the code.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col text-center">
+              <div class="card-body">
+                <form
+                  action="/makebound"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  onsubmit="return check();"
+                  >
+                  <input type="file" name="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" placeholder="select image from file manager" multiple accept="image/*"/>
+                  <br>
+                  <button class="btn btn-primary btn-xl custom-button" type="submit" value="Submit" id="inputGroupFileAddon04" onclick="changevisibility()">Download</button>
+                </form>
+                <br>
+                <ul class="list-inline">
+                <li class="list-inline-item">
+                <a id="dellnk" style="pointer-events: none"><button type="button" class="btn btn-outline-danger custom-button" id="delbut" style="width:23rem;margin:0 0 0 2.3rem; font-size: 15px; border-radius: 10px" onclick="showthumb()" disabled>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                  </svg>
+                  Delete Files
+                </button></a>
+                </li>
+                <li id="thumbsup" class="list-inline-item" style="visibility:hidden">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16" style="color:#0e8b12">
+                    <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z"/>
+                  </svg>
+                </li>
+                </ul>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+
   </body>
 </html>

@@ -241,3 +241,6 @@ body{
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
+.forfeed {
+    margin: 0 10rem 0 -10rem;
+}

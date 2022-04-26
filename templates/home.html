@@ -3,7 +3,6 @@
 
 <head>
     <title>DataGen</title>
-    <link rel="stylesheet" href="../static/display.css">
     <link rel="stylesheet" href="{{url_for('static',filename='display.css')}}" />
     <link rel="icon" href="{{url_for('static',filename='data.png')}}" type="image/png" />
 
@@ -25,8 +24,8 @@
   
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img class="img_logo" src="../static/data.png" alt="" srcset="">
+      <a class="navbar-brand" href="{{url_for('home')}}">
+        <img class="img_logo" src="{{url_for('static',filename='data.png')}}" alt="" srcset="">
         <span class="content_nav">
 
           DATAGEN
@@ -53,7 +52,7 @@
         <div class="row align-items-center mar_cards">
           <div class="col">
             <div class="card" style="width: 19rem;">
-              <img src="../static/FEC.svg" class="card-img-top" alt="...">
+              <img src="{{url_for('static',filename='FEC.svg')}}" class="card-img-top" alt="...">
               <div class="card-body">
                 <h5 class="card-title">Facial Emotion Classification</h5>
                 <p class="card-text">Annotate the given images and generate a structured dataset which can be used for FEC(Neutral, Happy, Surprise, Angry, Disgust, Sad, Fear).</p>
@@ -63,7 +62,7 @@
           </div>
           <div class="col">
             <div class="card" style="width: 19rem;">
-              <img src="../static/FD.jpg" class="card-img-top" alt="...">
+              <img src="{{url_for('static',filename='FD.jpg')}}" class="card-img-top" alt="...">
               <div class="card-body">
                 <h5 class="card-title">Face Detection</h5>
                 <p class="card-text">Detect the faces in the given images and generate a zip file with all the bounding boxes in xml format which can be used for FD with TF 2.0. </p>
@@ -73,7 +72,7 @@
           </div>
           <div class="col">
             <div class="card" style="width: 19rem;">
-              <img src="../static/FED.jpg" class="card-img-top" alt="...">
+              <img src="{{url_for('static',filename='FED.jpg')}}" class="card-img-top" alt="...">
               <div class="card-body">
                 <h5 class="card-title">Facial Emotion Detection</h5>
                 <p class="card-text">Detect the bounding boxes and classifies the expression into one of seven emotions(Neutral, Happy, Surprise, Angry, Disgust, Sad, Fear).</p>

@@ -24,9 +24,6 @@ detect_fn = tf.saved_model.load("Models/FaceDetector/saved_model")#Load the face
 
 class_names = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-static_files = ['Aboutb.jpg', 'cam.jpg', 'Classifyb.jpg', 'Classifydoneb.jpg', 'Detectb.jpg', 'Detectdoneb.jpg',
-                'display.css', 'eye.png', 'eye1.png', 'feedbackb.jpg', 'Homeb.jpg', 'loading-page.gif',
-                'Picdetectb.jpg', 'Picuploadb.jpg', 'thumbsup.jpg', '1.jpg', '3.jpg']
 
 def MakeZipFile(filepath):
     shutil.make_archive('./dataset','zip',filepath)
@@ -37,29 +34,23 @@ def MakeZipLabel(filepath):
 def MakeZipFed(filepath):
     shutil.make_archive('./feddata', 'zip', filepath)
 
-@app.route('/picdelete')
-def picdelete():
-    #When this function is called all the files that are not present in the
-    #list static_files will be deleted.
-    for file in os.listdir("static"):
-        if file not in static_files:
-            os.remove(f"static/{file}")
-    return ("nothing")
-
 #Below functions are used to delete the input and output files after the user exits.
 @app.route('/deletelabel')
 def deletelabel():
-    os.remove("labeldata.zip")
+    if "labeldata.zip" in os.listdir("./"):
+        os.remove("labeldata.zip")
     return ("nothing")
 
 @app.route('/deletedata')
 def deletedata():
-    os.remove("dataset.zip")
+    if "dataset.zip" in os.listdir("./"):
+        os.remove("dataset.zip")
     return ("nothing")
 
 @app.route('/deletefed')
 def deletefed():
-    os.remove("feddata.zip")
+    if "feddata.zip" in os.listdir("./"):
+        os.remove("feddata.zip")
     return ("nothing")
 
 @app.route('/')
@@ -70,34 +61,14 @@ def allowed_file(filename):
     return ('.' in filename and
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS)
 
-@app.route('/detectpic', methods=['GET', 'POST'])
-def detectpic():
-    UPLOAD_FOLDER = 'static'
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    if request.method == 'POST':
-
-        file = request.files['file']
-
-        if file and allowed_file(file.filename):
-
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            result =detectandupdate(filename)
-            return render_template('showdetect.html', orig=result[0], pred=result[1])
-
-@app.route('/picdetect')
-def picdetect():
-    return render_template('picdetect.html')
-
 @app.route('/bulkdetect', methods=['GET', 'POST'])
 def bulkdetect():
     dirs = ["preparedataset","preparedataset/Angry", "preparedataset/Disgust", "preparedataset/Fear", 
     "preparedataset/Happy", "preparedataset/input", "preparedataset/Neutral", "preparedataset/Sad",
     "preparedataset/Surprise"]
 
-    if dirs[0] in os.listdir("/home/ubuntu/flaskapp/"):
-        shutil.rmtree("preparedataset")#If the directory exits then deletes it.
+    if dirs[0] in os.listdir("./"):
+        shutil.rmtree("preparedataset")#If the directory already exits then deletes it.
 
     for dir in dirs:
         os.mkdir(dir)

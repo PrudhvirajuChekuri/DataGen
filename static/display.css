@@ -234,5 +234,10 @@ body{
     padding: 10px 20px;
     font-size: 20px;
     border-radius: 10px;
-    width:50%;
+    width:23rem;
+}
+.custom-button:focus {
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
 }

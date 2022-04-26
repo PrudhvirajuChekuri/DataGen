@@ -111,7 +111,10 @@ def bulkdetect():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 pushIntoFile(filename)
         MakeZipFile('./preparedataset')
-        return render_template('donedow.html')
+
+    path='dataset.zip'
+    shutil.rmtree("preparedataset")
+    return send_file(path,as_attachment=True)
 
 @app.route('/red_to_bulkin')
 def red_to_bulkin():
@@ -203,13 +206,6 @@ def fed():
 @app.route('/getinlab')
 def getinlab():
     return render_template('inputforbound.html')
-
-#Below three functions are used to download the generated zip files.
-@app.route('/downloadDS', methods=['GET', 'POST'])
-def downloaddataset():
-    path='dataset.zip'
-    shutil.rmtree("preparedataset")
-    return send_file(path,as_attachment=True)
 
 @app.route('/downloadLB', methods=['GET', 'POST'])
 def downloadLabel():

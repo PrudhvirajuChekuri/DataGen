@@ -227,3 +227,12 @@ body{
     height: 15vw;
     object-fit: cover;
 }
+.mar_card{
+    margin:6rem 0 0 5rem!important;
+}
+.btn-xl {
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 10px;
+    width:50%;
+}

@@ -81,8 +81,25 @@ It looks same as the above option but there is only one change i.e change in the
 * Other requirement are in the requirements.txt and can be installed as shown below.
 
 ## ⚙️Setup
+1. First create a virtual environment using venv. You can use powershell, go to the path you want and type the below commands. 
 ```
-pip install -r requirements.txt
+python -m venv DGen
+```
+2. Activate it.
+```
+DGen\Scripts\activate
+```
+Then you can use pip list to see what are all the packages installed and there will be pip and settup tools(in my case).
+
+3. Upgrade pip to the latest version.
+```
+python -m pip install --upgrade pip
+```
+Clone the DataGen repo and change the directory to DataGen and run the below command.
+
+4. Install the required packages.
+```
+python -m pip install -r requirements.txt
 ```
 That's it you're set to go.
 
